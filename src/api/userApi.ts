@@ -14,4 +14,17 @@ function userInfo() {
   })
 }
 
-export { userInfo }
+//定义请求返回的数据类型
+interface IUserLogin {
+  token: string
+}
+
+function userLogin(data: any) {
+  return Axios.requeset<IUserLogin>({
+    url: 'login',
+    method: 'post',
+    data
+  })
+}
+
+export { userInfo, userLogin }

@@ -10,6 +10,7 @@ async function bootStarp() {
   setupPlugins(app)
   await router.isReady()
   app.mount('#app')
+  
 }
 
 bootStarp()

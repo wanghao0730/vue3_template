@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+defineEmits<{
+  (e: 'loginEmit'): void
+}>()
+</script>
 
 <template>
-  <button class="button-class">登录</button>
+  <button class="button-class" @click="$emit('loginEmit')">登录</button>
 </template>
 
 <style lang="scss">

@@ -9,6 +9,7 @@ interface IInputProps {
 //利用 withDefaults对props的默认参数进行设置 会返回props
 const props = withDefaults(defineProps<IInputProps>(), {
   placeHolader: '请输入内容'
+  
 })
 //自定义事件
 </script>
@@ -18,7 +19,7 @@ const props = withDefaults(defineProps<IInputProps>(), {
     :placeholder="props.placeHolader"
     class="input-class"
     :value="props.modelValue"
-    @input="$emit('update:modelValue', $event?.target?.value)"
+    @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
   />
 </template>
 

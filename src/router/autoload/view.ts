@@ -1,15 +1,19 @@
 /**
- * 生成动态路由
+ * 动态生成路由 根据.env环境下的VITE_AUTOLOAD_ROUTER值是否为true
+ * 为true的情况通过加载本项目文件进行路由自动生成，为false 通过module模块中的数据进行生成路由
  */
 
 import { RouteRecordRaw } from 'vue-router'
-import routes from './routes'
-import { env } from '@/types/helper'
+// import routes from './routes'
+//该工具将env环境的值转换成对应的数据类型,如果默认从env取值所有参数值为string类型
+import { env } from '@/utils'
 
-const layouts = import.meta.globEager('../layout/*.vue')
+//import.meta.globEager目前只支持相对路径查找
+const layouts = import.meta.globEager('../../layout/*.vue')
 // **表示可以遍历下面的子目录
-const views = import.meta.globEager('../views/**/*.vue')
+const views = import.meta.globEager('../../views/**/*.vue')
 
+console.log('查找到的本地路由', layouts)
 //类型断言
 const routerLayouts = [] as RouteRecordRaw[]
 
@@ -42,15 +46,11 @@ function getRouteByModule(file: string, module: { [key: string]: any }) {
   const route = {
     name: name.replace('/', '.'),
     path: `/${name}`,
-    component: module.default
+    component: module.default,
+    meta: module.default.route?.meta ?? {} //判断是否存在meta元素 不存在则返回空对象
   } as RouteRecordRaw
   return route
 }
 
-//根据当前env环境中是否配置自动加载路由来调用方法
-const isAutoloadRouters = env.VITE_AUTOLOAD_ROUTER
-  ? getRouters()
-  : ([] as RouteRecordRaw[])
-
-console.log(isAutoloadRouters)
-export default isAutoloadRouters
+//返回 自动生成路由的函数给外界调用 用于判断是否自定义的生成还是项目文件的生成
+export default getRouters
